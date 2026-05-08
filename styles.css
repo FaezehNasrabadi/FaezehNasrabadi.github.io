@@ -42,6 +42,27 @@ button {
 .page-shell {
   display: flex; 
   align-items: flex-start;
+  position: relative;
+}
+
+.page-shell::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 99;
+}
+
+.sidebar.open ~ .content-area::before,
+.sidebar.open ~ .page-shell::before {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .sidebar {
@@ -57,6 +78,10 @@ button {
   flex-direction: column;
   overflow: hidden;
   z-index: 10;
+}
+
+.sidebar.open {
+  left: 0;
 }
 
 .brand {
@@ -840,6 +865,10 @@ h3 {
 @media (max-width: 660px) {
   .nav-toggle {
     display: flex;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 101;
   }
 
   .page-shell {
@@ -849,23 +878,34 @@ h3 {
   .sidebar {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-    max-height: 80vh;
+    left: -100%;
+    width: 75%;
+    height: 100vh;
     flex-direction: column;
     overflow-y: auto;
     z-index: 100;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    border-right: 1px solid rgba(148, 163, 184, 0.12);
+    transition: left 0.3s ease;
+  }
+
+  .sidebar.open {
+    left: 0;
   }
 
   .sidebar-top {
-    flex-direction: column;
-    gap: 0.75rem;
+    flex-direction: row;
+    gap: 1rem;
     padding: 1rem;
-    position: relative;
+    position: sticky;
+    top: 0;
     border-right: none;
     border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .brand {
+    flex-grow: 1;
   }
 
   .brand-text {
@@ -910,7 +950,7 @@ h3 {
   }
 
   .nav-links {
-    grid-template-columns: repeat(2, minmax(80px, 1fr));
+    grid-template-columns: 1fr;
     gap: 0.4rem;
   }
 
@@ -922,7 +962,7 @@ h3 {
   .content-area {
     padding: 1rem;
     margin-left: 0;
-    margin-top: calc(100% / 2);
+    margin-top: 0;
   }
 
   h1 {
